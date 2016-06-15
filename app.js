@@ -1,6 +1,8 @@
 var socketIOClient = require('socket.io-client');
 var sailsIOClient = require('sails.io.js');
 
+var exec = require('child_process').exec;
+
 // Instantiate the socket client (`io`)
 // (for now, you must explicitly pass in the socket.io client when using this library from Node.js)
 var io = sailsIOClient(socketIOClient);
@@ -25,3 +27,15 @@ io.socket.get('/virtualhost', function serverResponded (data) {
 io.socket.on('virtualhost', function serverResponded (data) {
     console.log(data);
 });
+
+exports.startNginx = function () {
+    exec("nginx -g daemon off", function (error, stdout, stderr) {
+        if (error !== null) {
+            console.log(error);
+        }
+        console.log(stdout);
+        console.log(stderr);
+    });
+}
+
+this.startNginx();
