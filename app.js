@@ -5,15 +5,11 @@ var child_process = require('child_process');
 var request = require('request');
 
 // Instantiate the socket client (`io`)
-// (for now, you must explicitly pass in the socket.io client when using this library from Node.js)
 var io = sailsIOClient(socketIOClient);
-
-// Set some options:
-// (you have to specify the host and port of the Sails backend when using this library from Node.js)
 io.sails.url = config.get('apiEndpoint');
-// ...
 
-// Send a GET request to `http://localhost:1337/hello`:
+
+// Send a GET request to `http://localhost:1337/virtualhost`:
 io.socket.get('/virtualhost', function serverResponded (data) {
     console.log(data);
 
@@ -57,7 +53,7 @@ var generateConfig = function () {
     var fs = require('fs');
     request(config.get('apiEndpoint') + "/virtualhost/nginx", function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        console.log(body); // Show the HTML for the Google homepage.
+        console.log(body);
 
         fs.writeFile(config.get('configFile'), body, function(err) {
             if (err) {
