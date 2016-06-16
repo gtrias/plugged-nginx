@@ -2,6 +2,7 @@ var socketIOClient = require('socket.io-client');
 var sailsIOClient = require('sails.io.js');
 var config = require('config');
 var child_process = require('child_process');
+var request = require('request');
 
 // Instantiate the socket client (`io`)
 // (for now, you must explicitly pass in the socket.io client when using this library from Node.js)
@@ -16,19 +17,21 @@ io.sails.url = config.get('apiEndpoint');
 io.socket.get('/virtualhost', function serverResponded (data) {
     console.log(data);
 
-  // When you are finished with `io.socket`, or any other sockets you connect manually,
-  // you should make sure and disconnect them, e.g.:
-  // io.socket.disconnect();
+    // When you are finished with `io.socket`, or any other sockets you connect manually,
+    // you should make sure and disconnect them, e.g.:
+    // io.socket.disconnect();
 
-  // (note that there is no callback argument to the `.disconnect` method)
+    // (note that there is no callback argument to the `.disconnect` method)
+    generateConfig();
 });
 
 io.socket.on('virtualhost', function serverResponded (data) {
     console.log(data);
-    // generateConfig();
+    generateConfig();
 });
 
-exports.startNginx = function () {
+
+var startNginx = function () {
     var nginx = child_process.spawn('nginx', ['-g', 'daemon off;']);
 
     // Capturing stdout
@@ -50,17 +53,22 @@ exports.startNginx = function () {
     });
 }
 
-process.on("SIGTERM", function() {
-   console.log("Parent SIGTERM detected");
-   // exit cleanly
-   process.exit();
-});
+var generateConfig = function () {
+    var fs = require('fs');
+    request(config.get('apiEndpoint') + "/virtualhost/nginx", function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        console.log(body); // Show the HTML for the Google homepage.
 
+        fs.writeFile(config.get('configFile'), body, function(err) {
+            if (err) {
+                return console.log(err);
+            }
 
-exports.generateConfig = function () {
-    request.get(apiEndpoint + "/virtualhost/nginx", function (data) {
-        console.log(data);
-    });
+            console.log("The file was saved!");
+        });
+
+      }
+    })
 }
 
-this.startNginx();
+startNginx();

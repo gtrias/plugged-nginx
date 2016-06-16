@@ -1,4 +1,5 @@
 {
   // Nginx API endpoint
-  "apiEndpoint": "http://localhost:1337"
+  "apiEndpoint": "http://localhost:1337",
+  "configFile": "/etc/nginx/dynamic-nginx.conf"
 }
