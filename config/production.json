@@ -1,0 +1,4 @@
+{
+  // Nginx API endpoint
+  "apiEndpoint": "http://nginxApi:1337"
+}

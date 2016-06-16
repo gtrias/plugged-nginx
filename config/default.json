@@ -1,0 +1,4 @@
+{
+  // Nginx API endpoint
+  "apiEndpoint": "http://localhost:1337"
+}

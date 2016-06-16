@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "config": "^1.21.0",
+    "request": "^2.72.0",
     "sails.io.js": "^0.13.8",
     "socket.io-client": "^1.4.6"
   }
